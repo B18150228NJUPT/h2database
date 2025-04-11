@@ -10,8 +10,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
+import org.h2.samples.entity.IesWorkOrderInfo;
 import org.h2.tools.DeleteDbFiles;
 
 /**
@@ -31,7 +33,17 @@ public class DirectInsert {
         Class.forName("org.h2.Driver");
         DeleteDbFiles.execute("~", "test", true);
         String url = "jdbc:h2:~/test";
-        initialInsert(url, 200_000);
+
+        int len = 200_000;
+        LinkedList<IesWorkOrderInfo> iesWorkOrderInfos = new LinkedList<>();
+        for (int i = 0; i < len; i++) {
+            iesWorkOrderInfos.add(new IesWorkOrderInfo());
+        }
+
+        long l = System.currentTimeMillis();
+        initialInsert(url, len);
+        System.out.println(System.currentTimeMillis() -l + "ms");
+
         for (int i = 0; i < 3; i++) {
             createAsSelect(url, true);
             createAsSelect(url, false);
@@ -39,7 +51,7 @@ public class DirectInsert {
     }
 
     private static void initialInsert(String url, int len) throws SQLException {
-        Connection conn = DriverManager.getConnection(url + ";LOG=0");
+        Connection conn = DriverManager.getConnection(url);
         Statement stat = conn.createStatement();
         stat.execute("DROP TABLE IF EXISTS TEST");
         stat.execute("CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR)");

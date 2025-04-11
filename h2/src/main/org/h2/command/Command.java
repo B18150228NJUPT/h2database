@@ -293,6 +293,7 @@ public abstract class Command implements CommandInterface {
         boolean callStop = true;
         Database database = getDatabase();
         commitIfNonTransactional();
+        // save point
         SessionLocal.Savepoint rollback = session.setSavepoint();
         session.startStatementWithinTransaction(this);
         DbException ex = null;

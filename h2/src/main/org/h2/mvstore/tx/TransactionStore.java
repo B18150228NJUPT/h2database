@@ -392,6 +392,7 @@ public class TransactionStore {
     private Transaction registerTransaction(int txId, int status, String name, long logId,
                                             int timeoutMillis, int ownerId,
                                             IsolationLevel isolationLevel, RollbackListener listener) {
+        // 开启事务
         int transactionId;
         long sequenceNo;
         boolean success;

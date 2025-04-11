@@ -1605,6 +1605,8 @@ public final class SessionLocal extends Session implements TransactionStore.Roll
     /**
      * Get the transaction to use for this session.
      *
+     * 获取事务管理器
+     *
      * @return the transaction
      */
     public Transaction getTransaction() {
